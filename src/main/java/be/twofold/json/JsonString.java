@@ -16,6 +16,11 @@ final class JsonString extends JsonValue {
         return true;
     }
 
+    @Override
+    public String asString() {
+        return value;
+    }
+
 
     @Override
     public boolean equals(Object obj) {

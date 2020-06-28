@@ -27,4 +27,13 @@ public class JsonStringTest {
         assertThat(value.isObject()).isFalse();
     }
 
+    @Test
+    public void testAs() {
+        assertThatIllegalStateException().isThrownBy(value::asBoolean);
+        assertThatIllegalStateException().isThrownBy(value::asNumber);
+        assertThatCode(value::asString).doesNotThrowAnyException();
+        assertThatIllegalStateException().isThrownBy(value::asArray);
+        assertThatIllegalStateException().isThrownBy(value::asObject);
+    }
+
 }

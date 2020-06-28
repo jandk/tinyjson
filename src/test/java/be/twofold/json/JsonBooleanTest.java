@@ -26,4 +26,13 @@ public class JsonBooleanTest {
         assertThat(value.isObject()).isFalse();
     }
 
+    @Test
+    public void testAs() {
+        assertThatCode(value::asBoolean).doesNotThrowAnyException();
+        assertThatIllegalStateException().isThrownBy(value::asNumber);
+        assertThatIllegalStateException().isThrownBy(value::asString);
+        assertThatIllegalStateException().isThrownBy(value::asArray);
+        assertThatIllegalStateException().isThrownBy(value::asObject);
+    }
+
 }

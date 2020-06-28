@@ -14,6 +14,11 @@ final class JsonNumber extends JsonValue {
         return true;
     }
 
+    @Override
+    public Number asNumber() {
+        return value;
+    }
+
 
     @Override
     public boolean equals(Object obj) {

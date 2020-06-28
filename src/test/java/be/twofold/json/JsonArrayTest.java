@@ -29,4 +29,13 @@ public class JsonArrayTest {
         assertThat(value.isObject()).isFalse();
     }
 
+    @Test
+    public void testAs() {
+        assertThatIllegalStateException().isThrownBy(value::asBoolean);
+        assertThatIllegalStateException().isThrownBy(value::asNumber);
+        assertThatIllegalStateException().isThrownBy(value::asString);
+        assertThatCode(value::asArray).doesNotThrowAnyException();
+        assertThatIllegalStateException().isThrownBy(value::asObject);
+    }
+
 }

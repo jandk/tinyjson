@@ -17,6 +17,11 @@ final class JsonBoolean extends JsonValue {
         return true;
     }
 
+    @Override
+    public boolean asBoolean() {
+        return value;
+    }
+
 
     @Override
     public boolean equals(Object obj) {

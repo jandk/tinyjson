@@ -16,6 +16,11 @@ public final class JsonArray extends JsonValue {
         return true;
     }
 
+    @Override
+    public JsonArray asArray() {
+        return this;
+    }
+
 
     @Override
     public boolean equals(Object obj) {
