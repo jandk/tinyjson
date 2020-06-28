@@ -10,6 +10,13 @@ final class JsonString extends JsonValue {
         this.value = Objects.requireNonNull(value, "value");
     }
 
+
+    @Override
+    public boolean isString() {
+        return true;
+    }
+
+
     @Override
     public boolean equals(Object obj) {
         return this == obj || obj instanceof JsonString

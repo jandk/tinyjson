@@ -10,6 +10,13 @@ public final class JsonArray extends JsonValue {
         this.values = Objects.requireNonNull(values, "values");
     }
 
+
+    @Override
+    public boolean isArray() {
+        return true;
+    }
+
+
     @Override
     public boolean equals(Object obj) {
         return this == obj || obj instanceof JsonArray

@@ -8,6 +8,13 @@ final class JsonNumber extends JsonValue {
         this.value = value;
     }
 
+
+    @Override
+    public boolean isNumber() {
+        return true;
+    }
+
+
     @Override
     public boolean equals(Object obj) {
         return this == obj || obj instanceof JsonNumber

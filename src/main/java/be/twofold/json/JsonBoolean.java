@@ -11,6 +11,13 @@ final class JsonBoolean extends JsonValue {
         this.value = value;
     }
 
+
+    @Override
+    public boolean isBoolean() {
+        return true;
+    }
+
+
     @Override
     public boolean equals(Object obj) {
         return this == obj || obj instanceof JsonBoolean
