@@ -17,7 +17,12 @@ public class JsonParser {
 
     public JsonValue parse() {
         skipWhitespace();
-        JsonValue result = parseValue();
+        JsonValue result;
+        try {
+            result = parseValue();
+        } catch (StackOverflowError e) {
+            throw new JsonParseException("Stack overflow");
+        }
         skipWhitespace();
         if (!isEof()) {
             throw new JsonParseException("Not a single JSON document");
