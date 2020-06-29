@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.*;
 
 public class JsonNumberTest {
 
-    private final JsonValue value = new JsonNumber(0);
+    private final JsonValue value = new JsonNumber(1);
 
     @Test
     public void testEqualsAndHashCode() {
@@ -30,7 +30,7 @@ public class JsonNumberTest {
     @Test
     public void testAs() {
         assertThatIllegalStateException().isThrownBy(value::asBoolean);
-        assertThatCode(value::asNumber).doesNotThrowAnyException();
+        assertThat(value.asNumber()).isEqualTo(1);
         assertThatIllegalStateException().isThrownBy(value::asString);
         assertThatIllegalStateException().isThrownBy(value::asArray);
         assertThatIllegalStateException().isThrownBy(value::asObject);

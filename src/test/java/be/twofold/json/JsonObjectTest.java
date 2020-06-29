@@ -9,7 +9,10 @@ import static org.assertj.core.api.Assertions.*;
 
 public class JsonObjectTest {
 
-    private final JsonValue value = new JsonObject(Map.of());
+    private final JsonValue value = new JsonObject(Map.of(
+        "name", new JsonString("John Doe"),
+        "age", new JsonNumber(42)
+    ));
 
     @Test
     public void testEqualsAndHashCode() {
@@ -35,7 +38,7 @@ public class JsonObjectTest {
         assertThatIllegalStateException().isThrownBy(value::asNumber);
         assertThatIllegalStateException().isThrownBy(value::asString);
         assertThatIllegalStateException().isThrownBy(value::asArray);
-        assertThatCode(value::asObject).doesNotThrowAnyException();
+        assertThat(value.asObject()).isEqualTo(value);
     }
 
 }
