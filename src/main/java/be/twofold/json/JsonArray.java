@@ -6,6 +6,10 @@ public final class JsonArray extends JsonValue {
 
     private final List<JsonValue> values;
 
+    JsonArray() {
+        this(new ArrayList<>());
+    }
+
     JsonArray(List<JsonValue> values) {
         this.values = Objects.requireNonNull(values, "values");
     }

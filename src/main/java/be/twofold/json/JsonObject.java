@@ -6,6 +6,10 @@ public final class JsonObject extends JsonValue {
 
     private final Map<String, JsonValue> values;
 
+    JsonObject() {
+        this(new HashMap<>());
+    }
+
     JsonObject(Map<String, JsonValue> values) {
         this.values = Objects.requireNonNull(values, "values");
     }
