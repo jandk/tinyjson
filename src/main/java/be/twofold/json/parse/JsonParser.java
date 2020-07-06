@@ -11,12 +11,12 @@ public class JsonParser {
 
     public JsonParser(Reader reader) {
         this.tokenizer = new JsonTokenizer(reader);
-        tokenizer.next();
     }
 
     public JsonValue parse() {
         JsonValue result;
         try {
+            tokenizer.next();
             result = parseValue();
         } catch (StackOverflowError e) {
             throw new JsonParseException("Stack overflow");
@@ -94,13 +94,6 @@ public class JsonParser {
     private void verify(JsonToken expected) {
         if (tokenizer.getToken() != expected) {
             throw new JsonParseException();
-        }
-    }
-
-    private void expect(JsonToken expected) {
-        JsonToken token = tokenizer.getToken();
-        if (token != expected) {
-            throw new JsonParseException("Expected " + expected + ", got " + token);
         }
     }
 

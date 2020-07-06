@@ -3,7 +3,6 @@ package be.twofold.json.parse;
 import be.twofold.json.*;
 
 import java.io.*;
-import java.util.*;
 
 final class JsonTokenizer {
 
@@ -190,8 +189,8 @@ final class JsonTokenizer {
         return builder.toString();
     }
 
-    private StringBuilder appendNext() {
-        return builder.appendCodePoint(reader.read());
+    private void appendNext() {
+        builder.appendCodePoint(reader.read());
     }
 
     private void digits() {
@@ -234,33 +233,6 @@ final class JsonTokenizer {
             default:
                 return false;
         }
-    }
-
-    public static void main(String[] args) {
-        //language=JSON
-        String json = "{\n" +
-            "  \"s\": \"This is a string\",\n" +
-            "  \"n\": -42.0,\n" +
-            "  \"ct\": true,\n" +
-            "  \"cf\": false,\n" +
-            "  \"cn\": null,\n" +
-            "  \"a\": [\n" +
-            "    \"john\",\n" +
-            "    \"doe\"\n" +
-            "  ]\n" +
-            "}\n";
-
-        JsonTokenizer tokenizer = new JsonTokenizer(new StringReader(json));
-        while (true) {
-            JsonToken token = tokenizer.next();
-            if (token == JsonToken.Eof) {
-                break;
-            }
-            System.out.println(tokenizer.getToken() + "\t" + Objects.toString(tokenizer.getValue(), ""));
-        }
-
-        JsonParser parser = new JsonParser(new StringReader(json));
-        System.out.println("parser.parse() = " + parser.parse());
     }
 
 }
