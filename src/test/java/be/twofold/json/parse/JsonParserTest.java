@@ -1,6 +1,5 @@
 package be.twofold.json.parse;
 
-import be.twofold.json.*;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;

@@ -1,4 +1,4 @@
-package be.twofold.json;
+package be.twofold.json.parse;
 
 public class JsonParseException extends RuntimeException {
     public JsonParseException() {

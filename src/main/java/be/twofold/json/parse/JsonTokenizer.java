@@ -1,7 +1,5 @@
 package be.twofold.json.parse;
 
-import be.twofold.json.*;
-
 import java.io.*;
 
 final class JsonTokenizer {
