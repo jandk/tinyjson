@@ -1,5 +1,6 @@
 package be.twofold.json;
 
+import be.twofold.json.parse.*;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
@@ -35,7 +36,8 @@ public class JsonParserTest {
         String type = filename.substring(0, 2);
         switch (type) {
             case "i_":
-                throw new UnsupportedOperationException("TODO");
+//                throw new UnsupportedOperationException("TODO");
+                break;
             case "n_":
                 testForFailure(filename);
                 break;

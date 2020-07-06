@@ -10,7 +10,7 @@ public final class JsonObject extends JsonValue {
         this(new HashMap<>());
     }
 
-    JsonObject(Map<String, JsonValue> values) {
+    public JsonObject(Map<String, JsonValue> values) {
         this.values = Objects.requireNonNull(values, "values");
     }
 
@@ -39,7 +39,7 @@ public final class JsonObject extends JsonValue {
 
     @Override
     public String toString() {
-        return "JsonObject(" + values.size() + "items)";
+        return "JsonObject(" + values + ")";
     }
 
 }

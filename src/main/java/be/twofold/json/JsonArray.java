@@ -10,7 +10,7 @@ public final class JsonArray extends JsonValue {
         this(new ArrayList<>());
     }
 
-    JsonArray(List<JsonValue> values) {
+    public JsonArray(List<JsonValue> values) {
         this.values = Objects.requireNonNull(values, "values");
     }
 
@@ -39,7 +39,7 @@ public final class JsonArray extends JsonValue {
 
     @Override
     public String toString() {
-        return "JsonArray(" + values.size() + "items)";
+        return "JsonArray(" + values + ")";
     }
 
 }
