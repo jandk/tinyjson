@@ -5,7 +5,7 @@ import be.twofold.json.*;
 import java.io.*;
 import java.util.*;
 
-public class JsonParser {
+public final class JsonParser {
 
     private final JsonTokenizer tokenizer;
 

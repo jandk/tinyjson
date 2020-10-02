@@ -1,6 +1,7 @@
 package be.twofold.json.parse;
 
-public class JsonParseException extends RuntimeException {
+public final class JsonParseException extends RuntimeException {
+
     public JsonParseException() {
     }
 
@@ -15,4 +16,5 @@ public class JsonParseException extends RuntimeException {
     public JsonParseException(Throwable cause) {
         super(cause);
     }
+
 }
