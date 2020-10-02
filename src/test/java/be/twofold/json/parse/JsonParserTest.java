@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.*;
 @RunWith(Parameterized.class)
 public class JsonParserTest {
 
-    private static final Path Root = Paths.get("src", "test", "resources", "JSONTestSuite", "parsing");
+    private static final Path Root = Paths.get("src/test/resources/JSONTestSuite/parsing");
 
     private final String filename;
 
@@ -35,7 +35,7 @@ public class JsonParserTest {
         String type = filename.substring(0, 2);
         switch (type) {
             case "i_":
-//                throw new UnsupportedOperationException("TODO");
+                testUndetermined(filename);
                 break;
             case "n_":
                 testForFailure(filename);
@@ -58,12 +58,30 @@ public class JsonParserTest {
             .doesNotThrowAnyException();
     }
 
-    private void parseFile(String filename) {
+    private void testUndetermined(String filename) {
+        try {
+            parseFile(filename);
+        } catch (JsonParseException e) {
+            System.err.println("F -- " + filename + " -- " + getRootCause(e).getClass().getSimpleName());
+        }
+        System.out.println("P -- " + filename);
+    }
+
+    private static void parseFile(String filename) {
         try (Reader reader = Files.newBufferedReader(Root.resolve(filename))) {
             new JsonParser(reader).parse();
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
+    }
+
+    private static Throwable getRootCause(Throwable throwable) {
+        List<Throwable> list = new ArrayList<>();
+        while (throwable != null && !list.contains(throwable)) {
+            list.add(throwable);
+            throwable = throwable.getCause();
+        }
+        return list.isEmpty() ? null : list.get(list.size() - 1);
     }
 
 }
