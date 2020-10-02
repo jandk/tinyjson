@@ -2,10 +2,12 @@ package be.twofold.json;
 
 public final class Json {
 
-    public static final JsonValue Null = JsonNull.Null;
-
     private Json() {
         throw new UnsupportedOperationException();
+    }
+
+    public static JsonValue nul() {
+        return JsonNull.Null;
     }
 
     public static JsonValue bool(boolean value) {

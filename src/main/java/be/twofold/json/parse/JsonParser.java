@@ -44,7 +44,7 @@ public class JsonParser {
             case False:
                 return Json.bool(false);
             case Null:
-                return Json.Null;
+                return Json.nul();
             default:
                 throw new JsonParseException("Unexpected token: " + tokenizer.getToken());
         }
