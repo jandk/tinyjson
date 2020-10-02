@@ -12,11 +12,6 @@ final class JsonString extends JsonValue {
 
 
     @Override
-    public boolean isString() {
-        return true;
-    }
-
-    @Override
     public String asString() {
         return value;
     }

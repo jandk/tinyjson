@@ -16,11 +16,6 @@ public final class JsonObject extends JsonValue {
 
 
     @Override
-    public boolean isObject() {
-        return true;
-    }
-
-    @Override
     public JsonObject asObject() {
         return this;
     }

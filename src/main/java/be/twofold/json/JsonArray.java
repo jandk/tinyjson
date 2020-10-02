@@ -16,11 +16,6 @@ public final class JsonArray extends JsonValue {
 
 
     @Override
-    public boolean isArray() {
-        return true;
-    }
-
-    @Override
     public JsonArray asArray() {
         return this;
     }

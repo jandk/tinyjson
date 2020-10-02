@@ -17,11 +17,6 @@ final class JsonNumber extends JsonValue {
 
 
     @Override
-    public boolean isNumber() {
-        return true;
-    }
-
-    @Override
     public Number asNumber() {
         return value;
     }

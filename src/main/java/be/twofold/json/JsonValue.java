@@ -6,28 +6,28 @@ public abstract class JsonValue {
     }
 
 
-    public boolean isNull() {
-        return false;
+    public final boolean isNull() {
+        return this instanceof JsonNull;
     }
 
-    public boolean isBoolean() {
-        return false;
+    public final boolean isBoolean() {
+        return this instanceof JsonBoolean;
     }
 
-    public boolean isNumber() {
-        return false;
+    public final boolean isNumber() {
+        return this instanceof JsonNumber;
     }
 
-    public boolean isString() {
-        return false;
+    public final boolean isString() {
+        return this instanceof JsonString;
     }
 
-    public boolean isArray() {
-        return false;
+    public final boolean isArray() {
+        return this instanceof JsonArray;
     }
 
-    public boolean isObject() {
-        return false;
+    public final boolean isObject() {
+        return this instanceof JsonObject;
     }
 
 
