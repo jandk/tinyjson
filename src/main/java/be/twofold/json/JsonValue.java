@@ -6,39 +6,6 @@ public abstract class JsonValue {
     }
 
 
-    public static JsonValue jsonNull() {
-        return JsonNull.Null;
-    }
-
-    public static JsonValue jsonBoolean(boolean value) {
-        return value ? JsonBoolean.True : JsonBoolean.False;
-    }
-
-    public static JsonValue jsonNumber(String value) {
-        return new JsonNumber(value);
-    }
-
-    public static JsonValue jsonNumber(long value) {
-        return new JsonNumber(value);
-    }
-
-    public static JsonValue jsonNumber(double value) {
-        return new JsonNumber(value);
-    }
-
-    public static JsonValue jsonString(String value) {
-        return new JsonString(value);
-    }
-
-    public static JsonArray jsonArray() {
-        return new JsonArray();
-    }
-
-    public static JsonObject jsonObject() {
-        return new JsonObject();
-    }
-
-
     public boolean isNull() {
         return false;
     }

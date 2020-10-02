@@ -36,15 +36,15 @@ public class JsonParser {
             case ArrayStart:
                 return parseArray();
             case String:
-                return JsonValue.jsonString(tokenizer.getValue());
+                return Json.string(tokenizer.getValue());
             case Number:
-                return JsonValue.jsonNumber(tokenizer.getValue());
+                return Json.number(tokenizer.getValue());
             case True:
-                return JsonValue.jsonBoolean(true);
+                return Json.bool(true);
             case False:
-                return JsonValue.jsonBoolean(false);
+                return Json.bool(false);
             case Null:
-                return JsonValue.jsonNull();
+                return Json.Null;
             default:
                 throw new JsonParseException("Unexpected token: " + tokenizer.getToken());
         }
