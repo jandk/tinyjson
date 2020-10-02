@@ -14,6 +14,12 @@ final class JsonNumber extends JsonValue {
 
 
     @Override
+    public JsonValue copy() {
+        return this;
+    }
+
+
+    @Override
     public Number asNumber() {
         return value;
     }

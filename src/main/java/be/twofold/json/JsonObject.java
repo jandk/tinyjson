@@ -16,6 +16,16 @@ public final class JsonObject extends JsonValue {
 
 
     @Override
+    public JsonValue copy() {
+        Map<String, JsonValue> values = new LinkedHashMap<>();
+        for (Map.Entry<String, JsonValue> entry : this.values.entrySet()) {
+            values.put(entry.getKey(), entry.getValue().copy());
+        }
+        return new JsonObject(values);
+    }
+
+
+    @Override
     public JsonObject asObject() {
         return this;
     }

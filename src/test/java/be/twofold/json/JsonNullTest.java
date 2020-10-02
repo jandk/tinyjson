@@ -42,4 +42,9 @@ public class JsonNullTest {
         assertThatIllegalStateException().isThrownBy(value::asDouble);
     }
 
+    @Test
+    public void testCopy() {
+        JsonValue copy = value.copy();
+        assertThat(copy).isSameAs(value);
+    }
 }

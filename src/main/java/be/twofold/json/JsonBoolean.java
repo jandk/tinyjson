@@ -13,6 +13,12 @@ final class JsonBoolean extends JsonValue {
 
 
     @Override
+    public JsonValue copy() {
+        return this;
+    }
+
+
+    @Override
     public boolean asBoolean() {
         return value;
     }

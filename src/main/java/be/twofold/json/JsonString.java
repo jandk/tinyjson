@@ -12,6 +12,12 @@ final class JsonString extends JsonValue {
 
 
     @Override
+    public JsonValue copy() {
+        return this;
+    }
+
+
+    @Override
     public String asString() {
         return value;
     }

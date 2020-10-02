@@ -16,6 +16,16 @@ public final class JsonArray extends JsonValue {
 
 
     @Override
+    public JsonValue copy() {
+        List<JsonValue> values = new ArrayList<>();
+        for (JsonValue value : this.values) {
+            values.add(value.copy());
+        }
+        return new JsonArray(values);
+    }
+
+
+    @Override
     public JsonArray asArray() {
         return this;
     }

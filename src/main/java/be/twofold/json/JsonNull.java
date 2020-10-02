@@ -9,6 +9,12 @@ final class JsonNull extends JsonValue {
 
 
     @Override
+    public JsonValue copy() {
+        return this;
+    }
+
+
+    @Override
     public boolean equals(Object obj) {
         return obj instanceof JsonNull;
     }

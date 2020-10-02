@@ -43,4 +43,9 @@ public class JsonNumberTest {
         assertThat(value.asDouble()).isEqualTo(1);
     }
 
+    @Test
+    public void testCopy() {
+        JsonValue copy = value.copy();
+        assertThat(copy).isSameAs(value);
+    }
 }

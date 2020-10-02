@@ -6,6 +6,9 @@ public abstract class JsonValue {
     }
 
 
+    public abstract JsonValue copy();
+
+
     public final boolean isNull() {
         return this instanceof JsonNull;
     }
