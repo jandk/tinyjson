@@ -52,6 +52,31 @@ public abstract class JsonValue {
     }
 
 
+    public byte asByte() {
+        throw ex("Number");
+    }
+
+    public short asShort() {
+        throw ex("Number");
+    }
+
+    public int asInt() {
+        throw ex("Number");
+    }
+
+    public long asLong() {
+        throw ex("Number");
+    }
+
+    public float asFloat() {
+        throw ex("Number");
+    }
+
+    public double asDouble() {
+        throw ex("Number");
+    }
+
+
     private RuntimeException ex(String type) {
         return new IllegalStateException("Value is not of type " + type);
     }

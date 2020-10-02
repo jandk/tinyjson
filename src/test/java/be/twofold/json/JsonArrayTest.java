@@ -39,6 +39,13 @@ public class JsonArrayTest {
         assertThatIllegalStateException().isThrownBy(value::asString);
         assertThat(value.asArray()).isEqualTo(value);
         assertThatIllegalStateException().isThrownBy(value::asObject);
+
+        assertThatIllegalStateException().isThrownBy(value::asByte);
+        assertThatIllegalStateException().isThrownBy(value::asShort);
+        assertThatIllegalStateException().isThrownBy(value::asInt);
+        assertThatIllegalStateException().isThrownBy(value::asLong);
+        assertThatIllegalStateException().isThrownBy(value::asFloat);
+        assertThatIllegalStateException().isThrownBy(value::asDouble);
     }
 
 }

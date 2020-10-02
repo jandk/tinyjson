@@ -33,6 +33,13 @@ public class JsonBooleanTest {
         assertThatIllegalStateException().isThrownBy(value::asString);
         assertThatIllegalStateException().isThrownBy(value::asArray);
         assertThatIllegalStateException().isThrownBy(value::asObject);
+
+        assertThatIllegalStateException().isThrownBy(value::asByte);
+        assertThatIllegalStateException().isThrownBy(value::asShort);
+        assertThatIllegalStateException().isThrownBy(value::asInt);
+        assertThatIllegalStateException().isThrownBy(value::asLong);
+        assertThatIllegalStateException().isThrownBy(value::asFloat);
+        assertThatIllegalStateException().isThrownBy(value::asDouble);
     }
 
 }

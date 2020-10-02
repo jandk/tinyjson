@@ -34,6 +34,13 @@ public class JsonNumberTest {
         assertThatIllegalStateException().isThrownBy(value::asString);
         assertThatIllegalStateException().isThrownBy(value::asArray);
         assertThatIllegalStateException().isThrownBy(value::asObject);
+
+        assertThat(value.asByte()).isEqualTo((byte) 1);
+        assertThat(value.asShort()).isEqualTo((short) 1);
+        assertThat(value.asInt()).isEqualTo(1);
+        assertThat(value.asLong()).isEqualTo(1);
+        assertThat(value.asFloat()).isEqualTo(1);
+        assertThat(value.asDouble()).isEqualTo(1);
     }
 
 }
