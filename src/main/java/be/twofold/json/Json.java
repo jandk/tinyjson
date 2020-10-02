@@ -1,10 +1,16 @@
 package be.twofold.json;
 
+import be.twofold.json.parse.*;
+
+import java.io.*;
+
 public final class Json {
 
     private Json() {
         throw new UnsupportedOperationException();
     }
+
+    // region Factory Methods
 
     public static JsonValue nul() {
         return JsonNull.Null;
@@ -36,6 +42,16 @@ public final class Json {
 
     public static JsonObject object() {
         return new JsonObject();
+    }
+
+    // endregion
+
+    public static JsonValue parse(Reader reader) {
+        return new JsonParser(reader).parse();
+    }
+
+    public static JsonValue parse(String json) {
+        return parse(new StringReader(json));
     }
 
 }
