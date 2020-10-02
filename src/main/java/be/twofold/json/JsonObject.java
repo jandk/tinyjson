@@ -2,7 +2,7 @@ package be.twofold.json;
 
 import java.util.*;
 
-public final class JsonObject extends JsonValue {
+public final class JsonObject extends JsonValue implements Iterable<Map.Entry<String, JsonValue>> {
 
     private final Map<String, JsonValue> values;
 
@@ -12,6 +12,12 @@ public final class JsonObject extends JsonValue {
 
     public JsonObject(Map<String, JsonValue> values) {
         this.values = Objects.requireNonNull(values, "values");
+    }
+
+
+    @Override
+    public Iterator<Map.Entry<String, JsonValue>> iterator() {
+        return values.entrySet().iterator();
     }
 
 

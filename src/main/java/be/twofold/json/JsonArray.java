@@ -2,7 +2,7 @@ package be.twofold.json;
 
 import java.util.*;
 
-public final class JsonArray extends JsonValue {
+public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
     private final List<JsonValue> values;
 
@@ -12,6 +12,12 @@ public final class JsonArray extends JsonValue {
 
     public JsonArray(List<JsonValue> values) {
         this.values = Objects.requireNonNull(values, "values");
+    }
+
+
+    @Override
+    public Iterator<JsonValue> iterator() {
+        return values.iterator();
     }
 
 
