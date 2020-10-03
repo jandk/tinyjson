@@ -46,55 +46,48 @@ public final class JsonParser {
             case Null:
                 return Json.nul();
             default:
-                throw new JsonParseException("Unexpected token: " + tokenizer.getToken());
+                throw new JsonParseException("Unexpected " + tokenizer.getToken());
         }
     }
 
     private JsonObject parseObject() {
-        Map<String, JsonValue> values = new HashMap<>();
-        while (true) {
-            tokenizer.next();
-            if (tokenizer.getToken() == JsonToken.ObjectEnd) {
-                break;
-            }
+        tokenizer.next(); // Skip leading ObjectStart
+
+        Map<String, JsonValue> values = new LinkedHashMap<>();
+        while (tokenizer.getToken() != JsonToken.ObjectEnd) {
             if (!values.isEmpty()) {
                 verify(JsonToken.Comma);
-                tokenizer.next();
             }
-            verify(JsonToken.String);
-            String key = tokenizer.getValue();
-            tokenizer.next();
+            String key = verify(JsonToken.String);
             verify(JsonToken.Colon);
+            values.put(key, parseValue());
             tokenizer.next();
-            JsonValue value = parseValue();
-            values.put(key, value);
         }
 
         return new JsonObject(values);
     }
 
     private JsonArray parseArray() {
+        tokenizer.next(); // Skip leading ArrayStart
+
         List<JsonValue> values = new ArrayList<>();
-        while (true) {
-            tokenizer.next();
-            if (tokenizer.getToken() == JsonToken.ArrayEnd) {
-                break;
-            }
+        while (tokenizer.getToken() != JsonToken.ArrayEnd) {
             if (!values.isEmpty()) {
                 verify(JsonToken.Comma);
-                tokenizer.next();
             }
-            JsonValue value = parseValue();
-            values.add(value);
+            values.add(parseValue());
+            tokenizer.next();
         }
-
         return new JsonArray(values);
     }
 
-    private void verify(JsonToken expected) {
+    private String verify(JsonToken expected) {
         if (tokenizer.getToken() != expected) {
-            throw new JsonParseException();
+            throw new JsonParseException("Expected " + expected + ", got " + tokenizer.getToken());
         }
+        String value = tokenizer.getValue();
+        tokenizer.next();
+        return value;
     }
 
 }
