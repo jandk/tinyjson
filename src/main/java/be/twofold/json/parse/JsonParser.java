@@ -3,7 +3,6 @@ package be.twofold.json.parse;
 import be.twofold.json.*;
 
 import java.io.*;
-import java.util.*;
 
 public final class JsonParser {
 
@@ -53,32 +52,32 @@ public final class JsonParser {
     private JsonObject parseObject() {
         tokenizer.next(); // Skip leading ObjectStart
 
-        Map<String, JsonValue> values = new LinkedHashMap<>();
+        JsonObject object = Json.object();
         while (tokenizer.getToken() != JsonToken.ObjectEnd) {
-            if (!values.isEmpty()) {
+            if (object.size() > 0) {
                 verify(JsonToken.Comma);
             }
             String key = verify(JsonToken.String);
             verify(JsonToken.Colon);
-            values.put(key, parseValue());
+            object.add(key, parseValue());
             tokenizer.next();
         }
 
-        return new JsonObject(values);
+        return object;
     }
 
     private JsonArray parseArray() {
         tokenizer.next(); // Skip leading ArrayStart
 
-        List<JsonValue> values = new ArrayList<>();
+        JsonArray array = Json.array();
         while (tokenizer.getToken() != JsonToken.ArrayEnd) {
-            if (!values.isEmpty()) {
+            if (array.size() > 0) {
                 verify(JsonToken.Comma);
             }
-            values.add(parseValue());
+            array.add(parseValue());
             tokenizer.next();
         }
-        return new JsonArray(values);
+        return array;
     }
 
     private String verify(JsonToken expected) {

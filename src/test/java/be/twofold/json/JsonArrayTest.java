@@ -3,16 +3,13 @@ package be.twofold.json;
 import nl.jqno.equalsverifier.*;
 import org.junit.*;
 
-import java.util.*;
-
 import static org.assertj.core.api.Assertions.*;
 
 public class JsonArrayTest {
 
-    private final JsonValue value = new JsonArray(List.of(
-        new JsonString("John Doe"),
-        new JsonNumber(42)
-    ));
+    private final JsonValue value = Json.array()
+        .add("John Doe")
+        .add(42);
 
     @Test
     public void testEqualsAndHashCode() {

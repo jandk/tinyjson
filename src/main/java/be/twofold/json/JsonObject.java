@@ -10,8 +10,8 @@ public final class JsonObject extends JsonValue implements Iterable<Map.Entry<St
         this(new HashMap<>());
     }
 
-    public JsonObject(Map<String, JsonValue> values) {
-        this.values = Objects.requireNonNull(values, "values");
+    private JsonObject(Map<String, JsonValue> values) {
+        this.values = values;
     }
 
 

@@ -10,10 +10,9 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
         this(new ArrayList<>());
     }
 
-    public JsonArray(List<JsonValue> values) {
-        this.values = Objects.requireNonNull(values, "values");
+    private JsonArray(List<JsonValue> values) {
+        this.values = values;
     }
-
 
     @Override
     public Iterator<JsonValue> iterator() {
