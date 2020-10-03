@@ -6,22 +6,16 @@ import java.io.*;
 
 public final class Json {
 
+    public static final JsonValue Null = JsonNull.Null;
+
     private Json() {
         throw new UnsupportedOperationException();
     }
 
     // region Factory Methods
 
-    public static JsonValue nul() {
-        return JsonNull.Null;
-    }
-
     public static JsonValue bool(boolean value) {
         return value ? JsonBoolean.True : JsonBoolean.False;
-    }
-
-    public static JsonValue number(String value) {
-        return new JsonNumber(value);
     }
 
     public static JsonValue number(long value) {
@@ -29,6 +23,14 @@ public final class Json {
     }
 
     public static JsonValue number(double value) {
+        return new JsonNumber(value);
+    }
+
+    public static JsonValue number(Number value) {
+        return new JsonNumber(value);
+    }
+
+    public static JsonValue number(String value) {
         return new JsonNumber(value);
     }
 
