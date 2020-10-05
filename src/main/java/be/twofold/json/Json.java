@@ -49,7 +49,7 @@ public final class Json {
     // endregion
 
     public static JsonValue parse(Reader reader) {
-        return new JsonParser(reader).parse();
+        return new JsonReader(reader).parse();
     }
 
     public static JsonValue parse(String json) {

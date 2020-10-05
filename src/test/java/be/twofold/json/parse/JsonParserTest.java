@@ -1,5 +1,6 @@
 package be.twofold.json.parse;
 
+import be.twofold.json.*;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
@@ -69,7 +70,7 @@ public class JsonParserTest {
 
     private static void parseFile(String filename) {
         try (Reader reader = Files.newBufferedReader(Root.resolve(filename))) {
-            new JsonParser(reader).parse();
+            Json.parse(reader);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
