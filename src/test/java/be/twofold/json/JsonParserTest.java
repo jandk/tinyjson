@@ -1,6 +1,5 @@
-package be.twofold.json.parse;
+package be.twofold.json;
 
-import be.twofold.json.*;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
@@ -50,7 +49,7 @@ public class JsonParserTest {
     }
 
     private void testForFailure(String filename) {
-        assertThatExceptionOfType(JsonParseException.class)
+        assertThatExceptionOfType(JsonException.class)
             .isThrownBy(() -> parseFile(filename));
     }
 
@@ -62,7 +61,7 @@ public class JsonParserTest {
     private void testUndetermined(String filename) {
         try {
             parseFile(filename);
-        } catch (JsonParseException e) {
+        } catch (JsonException e) {
             System.err.println("F -- " + filename + " -- " + getRootCause(e).getClass().getSimpleName());
         }
         System.out.println("P -- " + filename);

@@ -1,7 +1,5 @@
 package be.twofold.json;
 
-import be.twofold.json.parse.*;
-
 import java.io.*;
 
 public final class Json {
@@ -27,10 +25,6 @@ public final class Json {
     }
 
     public static JsonValue number(Number value) {
-        return new JsonNumber(value);
-    }
-
-    public static JsonValue number(String value) {
         return new JsonNumber(value);
     }
 

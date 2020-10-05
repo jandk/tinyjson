@@ -1,6 +1,4 @@
-package be.twofold.json.parse;
-
-import be.twofold.json.*;
+package be.twofold.json;
 
 import java.io.*;
 import java.util.*;
@@ -40,11 +38,11 @@ public class JsonReader {
             nextToken();
             result = parseValue();
         } catch (StackOverflowError e) {
-            throw new JsonParseException("Stack overflow");
+            throw new JsonException("Stack overflow");
         }
         nextToken();
         if (token != Eof) {
-            throw new JsonParseException("Not a single JSON document");
+            throw new JsonException("Not a single JSON document");
         }
         return result;
     }
@@ -59,7 +57,7 @@ public class JsonReader {
             case String:
                 return Json.string(value);
             case Number:
-                return Json.number(value);
+                return new JsonNumber(value);
             case True:
                 return Json.bool(true);
             case False:
@@ -67,7 +65,7 @@ public class JsonReader {
             case Null:
                 return Json.Null;
             default:
-                throw new JsonParseException("Unexpected " + token);
+                throw new JsonException("Unexpected " + token);
         }
     }
 
@@ -104,7 +102,7 @@ public class JsonReader {
 
     private String verify(int expected) {
         if (token != expected) {
-            throw new JsonParseException("Expected " + expected + ", got " + token);
+            throw new JsonException("Expected " + expected + ", got " + token);
         }
         String value = this.value;
         nextToken();
@@ -159,7 +157,7 @@ public class JsonReader {
             case -1:
                 return token(Eof, null);
             default:
-                throw new JsonParseException("Unexpected character '" + peek() + "'");
+                throw new JsonException("Unexpected character '" + peek() + "'");
         }
     }
 
@@ -176,7 +174,7 @@ public class JsonReader {
         builder.setLength(0);
         while (!isEof() && peek() != '"') {
             if (peek() < 0x20) {
-                throw new JsonParseException("Raw control character");
+                throw new JsonException("Raw control character");
             } else if (peek() == '\\') {
                 next();
                 switch (read()) {
@@ -208,14 +206,14 @@ public class JsonReader {
                         builder.append(parseUnicode());
                         break;
                     default:
-                        throw new JsonParseException("Illegal escape");
+                        throw new JsonException("Illegal escape");
                 }
             } else {
                 appendNext();
             }
         }
         if (peek() != '"') {
-            throw new JsonParseException("Unclosed string literal");
+            throw new JsonException("Unclosed string literal");
         }
         next();
         return builder.toString();
@@ -226,7 +224,7 @@ public class JsonReader {
         for (int i = 0; i < 4; i++) {
             int read = read();
             if (!isHexDigit(read)) {
-                throw new JsonParseException("Expected hex digit");
+                throw new JsonException("Expected hex digit");
             }
             result = (result << 4) | Character.digit(read, 16);
         }
@@ -249,7 +247,7 @@ public class JsonReader {
             appendNext();
         } else {
             if (peek() < '1' || peek() > '9') {
-                throw new JsonParseException();
+                throw new JsonException();
             }
             digits();
         }
@@ -274,7 +272,7 @@ public class JsonReader {
 
     private void digits() {
         if (!isDigit(peek())) {
-            throw new JsonParseException("Expected a digit");
+            throw new JsonException("Expected a digit");
         }
         while (isDigit(peek())) {
             appendNext();
@@ -286,7 +284,7 @@ public class JsonReader {
     private String expect(String expected) {
         for (int i = 0; i < expected.length(); i++) {
             if (read() != expected.charAt(i)) {
-                throw new JsonParseException("Expected '" + expected + "' literal");
+                throw new JsonException("Expected '" + expected + "' literal");
             }
         }
         return expected;
@@ -351,7 +349,7 @@ public class JsonReader {
         try {
             return reader.read();
         } catch (IOException e) {
-            throw new JsonParseException("Unexpected I/O error", e);
+            throw new JsonException("Unexpected I/O error", e);
         }
     }
 
