@@ -1,4 +1,4 @@
-package be.twofold.json;
+package be.twofold.tinyjson;
 
 final class JsonNumber extends JsonValue {
 

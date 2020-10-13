@@ -1,4 +1,4 @@
-package be.twofold.json;
+package be.twofold.tinyjson;
 
 import nl.jqno.equalsverifier.*;
 import org.junit.*;

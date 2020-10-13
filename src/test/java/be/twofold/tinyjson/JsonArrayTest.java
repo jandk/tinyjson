@@ -1,37 +1,40 @@
-package be.twofold.json;
+package be.twofold.tinyjson;
 
 import nl.jqno.equalsverifier.*;
 import org.junit.*;
 
 import static org.assertj.core.api.Assertions.*;
 
-public class JsonBooleanTest {
+public class JsonArrayTest {
 
-    private final JsonValue value = JsonBoolean.True;
+    private final JsonValue value = Json.array()
+        .add("John Doe")
+        .add(42);
 
     @Test
     public void testEqualsAndHashCode() {
         EqualsVerifier
-            .forClass(JsonBoolean.class)
+            .forClass(JsonArray.class)
+            .suppress(Warning.NULL_FIELDS)
             .verify();
     }
 
     @Test
     public void testIs() {
         assertThat(value.isNull()).isFalse();
-        assertThat(value.isBoolean()).isTrue();
+        assertThat(value.isBoolean()).isFalse();
         assertThat(value.isNumber()).isFalse();
         assertThat(value.isString()).isFalse();
-        assertThat(value.isArray()).isFalse();
+        assertThat(value.isArray()).isTrue();
         assertThat(value.isObject()).isFalse();
     }
 
     @Test
     public void testAs() {
-        assertThat(value.asBoolean()).isTrue();
+        assertThatIllegalStateException().isThrownBy(value::asBoolean);
         assertThatIllegalStateException().isThrownBy(value::asNumber);
         assertThatIllegalStateException().isThrownBy(value::asString);
-        assertThatIllegalStateException().isThrownBy(value::asArray);
+        assertThat(value.asArray()).isEqualTo(value);
         assertThatIllegalStateException().isThrownBy(value::asObject);
 
         assertThatIllegalStateException().isThrownBy(value::asByte);
@@ -45,7 +48,7 @@ public class JsonBooleanTest {
     @Test
     public void testCopy() {
         JsonValue copy = value.copy();
-        assertThat(copy).isSameAs(value);
+        assertThat(copy).isNotSameAs(value);
     }
 
 }
