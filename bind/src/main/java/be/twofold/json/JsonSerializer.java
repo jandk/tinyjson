@@ -1,4 +1,9 @@
 package be.twofold.json;
 
-public interface JsonSerializer {
+import be.twofold.tinyjson.*;
+
+public interface JsonSerializer<T> {
+
+    JsonValue serialize(T object, JsonSerializationContext context);
+
 }
