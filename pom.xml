@@ -6,46 +6,60 @@
     <groupId>be.twofold</groupId>
     <artifactId>tinyjson</artifactId>
     <version>0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>bind</module>
+        <module>core</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>3.17.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>nl.jqno.equalsverifier</groupId>
-            <artifactId>equalsverifier</artifactId>
-            <version>3.4.3</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>be.twofold</groupId>
+                <artifactId>tinyjson-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.13.1</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>3.17.2</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>nl.jqno.equalsverifier</groupId>
+                <artifactId>equalsverifier</artifactId>
+                <version>3.4.3</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <release>8</release>
-                </configuration>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
 </project>
