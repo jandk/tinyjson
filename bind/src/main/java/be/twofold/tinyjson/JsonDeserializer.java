@@ -1,6 +1,4 @@
-package be.twofold.json;
-
-import be.twofold.tinyjson.*;
+package be.twofold.tinyjson;
 
 @FunctionalInterface
 public interface JsonDeserializer<T> {
