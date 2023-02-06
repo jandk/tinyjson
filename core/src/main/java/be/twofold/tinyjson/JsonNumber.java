@@ -8,10 +8,6 @@ final class JsonNumber extends JsonValue {
         this.value = value;
     }
 
-    JsonNumber(String value) {
-        this.value = new LazyNumber(value);
-    }
-
 
     @Override
     public JsonValue copy() {

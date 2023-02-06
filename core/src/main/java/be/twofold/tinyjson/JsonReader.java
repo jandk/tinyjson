@@ -59,7 +59,7 @@ public final class JsonReader {
             case String:
                 return Json.string(value);
             case Number:
-                return new JsonNumber(value);
+                return Json.number(new StringNumber(value));
             case True:
                 return Json.bool(true);
             case False:

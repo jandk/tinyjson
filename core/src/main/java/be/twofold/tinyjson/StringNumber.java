@@ -3,11 +3,11 @@ package be.twofold.tinyjson;
 import java.math.*;
 import java.util.*;
 
-final class LazyNumber extends Number {
+final class StringNumber extends Number {
 
     private final String value;
 
-    LazyNumber(String value) {
+    StringNumber(String value) {
         this.value = Objects.requireNonNull(value);
     }
 
@@ -41,8 +41,8 @@ final class LazyNumber extends Number {
 
     @Override
     public boolean equals(Object obj) {
-        return this == obj || obj instanceof LazyNumber
-            && value.equals(((LazyNumber) obj).value);
+        return this == obj || obj instanceof StringNumber
+            && value.equals(((StringNumber) obj).value);
     }
 
     @Override
