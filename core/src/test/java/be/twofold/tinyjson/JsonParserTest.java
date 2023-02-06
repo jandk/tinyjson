@@ -1,8 +1,7 @@
 package be.twofold.tinyjson;
 
-import org.junit.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -11,18 +10,10 @@ import java.util.stream.*;
 
 import static org.assertj.core.api.Assertions.*;
 
-@RunWith(Parameterized.class)
 public class JsonParserTest {
 
     private static final Path Root = Paths.get("src/test/resources/JSONTestSuite/parsing");
 
-    private final String filename;
-
-    public JsonParserTest(String filename) {
-        this.filename = filename;
-    }
-
-    @Parameterized.Parameters(name = "{0}")
     public static List<String> getFileNames() throws Exception {
         return Files.list(Root)
             .filter(path -> path.getFileName().toString().endsWith(".json"))
@@ -30,8 +21,9 @@ public class JsonParserTest {
             .collect(Collectors.toList());
     }
 
-    @Test
-    public void test() {
+    @ParameterizedTest
+    @MethodSource("getFileNames")
+    public void test(String filename) {
         String type = filename.substring(0, 2);
         switch (type) {
             case "i_":
