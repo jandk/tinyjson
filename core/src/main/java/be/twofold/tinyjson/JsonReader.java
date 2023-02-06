@@ -3,7 +3,7 @@ package be.twofold.tinyjson;
 import java.io.*;
 import java.util.*;
 
-public class JsonReader {
+public final class JsonReader {
 
     private static final int ObjectStart = 1;
     private static final int ObjectEnd = 2;
@@ -18,16 +18,18 @@ public class JsonReader {
     private static final int Null = 11;
     private static final int Eof = 12;
 
-    private final StringBuilder builder = new StringBuilder();
+    // Reader state
+    private static final int NotPeeked = -2;
     private final Reader reader;
+    private int peeked = NotPeeked;
 
-    private int current;
+    // Tokenizer state
+    private final StringBuilder builder = new StringBuilder();
     private int token;
     private String value;
 
     public JsonReader(Reader reader) {
         this.reader = Objects.requireNonNull(reader, "reader");
-        next();
     }
 
     // region Parser
@@ -113,29 +115,36 @@ public class JsonReader {
 
     // region Tokenizer
 
-    public int nextToken() {
+    public void nextToken() {
         skipWhitespace();
         switch (peek()) {
             case '{':
-                next();
-                return token(ObjectStart, null);
+                read();
+                token(ObjectStart, null);
+                break;
             case '}':
-                next();
-                return token(ObjectEnd, null);
+                read();
+                token(ObjectEnd, null);
+                break;
             case '[':
-                next();
-                return token(ArrayStart, null);
+                read();
+                token(ArrayStart, null);
+                break;
             case ']':
-                next();
-                return token(ArrayEnd, null);
+                read();
+                token(ArrayEnd, null);
+                break;
             case ':':
-                next();
-                return token(Colon, null);
+                read();
+                token(Colon, null);
+                break;
             case ',':
-                next();
-                return token(Comma, null);
+                read();
+                token(Comma, null);
+                break;
             case '"':
-                return token(String, parseString());
+                token(String, parseString());
+                break;
             case '-':
             case '0':
             case '1':
@@ -147,36 +156,43 @@ public class JsonReader {
             case '7':
             case '8':
             case '9':
-                return token(Number, parseNumber());
+                token(Number, parseNumber());
+                break;
             case 't':
-                return token(True, expect("true"));
+                token(True, expect("true"));
+                break;
             case 'f':
-                return token(False, expect("false"));
+                token(False, expect("false"));
+                break;
             case 'n':
-                return token(Null, expect("null"));
+                token(Null, expect("null"));
+                break;
             case -1:
-                return token(Eof, null);
+                token(Eof, null);
+                break;
             default:
-                throw new JsonException("Unexpected character '" + peek() + "'");
+                throw new JsonException("Unexpected character '" + (char) peek() + "'");
         }
     }
 
-    private int token(int type, String value) {
+    private void token(int type, String value) {
         this.token = type;
         this.value = value;
-        return type;
     }
 
     // region String
 
     private String parseString() {
-        next(); // skip leading '"'
+        // skip leading '"'
+        read();
         builder.setLength(0);
         while (!isEof() && peek() != '"') {
             if (peek() < 0x20) {
                 throw new JsonException("Raw control character");
-            } else if (peek() == '\\') {
-                next();
+            }
+
+            if (peek() == '\\') {
+                read();
                 switch (read()) {
                     case '"':
                         builder.append('"');
@@ -212,10 +228,9 @@ public class JsonReader {
                 appendNext();
             }
         }
-        if (peek() != '"') {
+        if (read() != '"') {
             throw new JsonException("Unclosed string literal");
         }
-        next();
         return builder.toString();
     }
 
@@ -291,58 +306,59 @@ public class JsonReader {
     }
 
     private void appendNext() {
-        builder.appendCodePoint(read());
+        builder.append(read());
     }
 
     private void skipWhitespace() {
         while (isWhitespace(peek())) {
-            next();
+            read();
         }
     }
 
     private boolean isWhitespace(int c) {
         switch (c) {
-            case '\t':
+            case ' ':
             case '\n':
             case '\r':
-            case ' ':
+            case '\t':
                 return true;
             default:
                 return false;
         }
     }
 
-    private boolean isDigit(int ch) {
-        return ch >= '0' && ch <= '9';
+    private boolean isDigit(int c) {
+        return c >= '0' && c <= '9';
     }
 
     private boolean isHexDigit(int c) {
-        return c >= '0' && c <= '9'
-            || c >= 'A' && c <= 'F'
-            || c >= 'a' && c <= 'f';
+        return isDigit(c)
+            || c >= 'a' && c <= 'f'
+            || c >= 'A' && c <= 'F';
     }
 
     // endregion
 
     // region Low-level reading
 
-    int peek() {
-        return current;
+    private int peek() {
+        if (peeked == NotPeeked) {
+            peeked = readChar();
+        }
+        return peeked;
     }
 
-    int read() {
-        int result = current;
-        current = readChar();
+    private int read() {
+        if (peeked == NotPeeked) {
+            return readChar();
+        }
+        int result = peeked;
+        peeked = NotPeeked;
         return result;
     }
 
-    int next() {
-        current = readChar();
-        return current;
-    }
-
-    boolean isEof() {
-        return current == -1;
+    private boolean isEof() {
+        return peek() == -1;
     }
 
     private int readChar() {
