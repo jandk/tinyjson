@@ -6,24 +6,11 @@ import java.util.*;
 
 public final class JsonReader {
 
-    private static final int ObjectStart = 1;
-    private static final int ObjectEnd = 2;
-    private static final int ArrayStart = 3;
-    private static final int ArrayEnd = 4;
-    private static final int Colon = 5;
-    private static final int Comma = 6;
-    private static final int String = 7;
-    private static final int Number = 8;
-    private static final int True = 9;
-    private static final int False = 10;
-    private static final int Null = 11;
-    private static final int Eof = 12;
-
     private final PeekingReader reader;
 
     // Tokenizer state
     private final StringBuilder builder = new StringBuilder();
-    private int token;
+    private TokenType token;
     private String value;
 
     JsonReader(PeekingReader reader) {
@@ -41,7 +28,7 @@ public final class JsonReader {
             throw new JsonException("Stack overflow");
         }
         nextToken();
-        if (token != Eof) {
+        if (token != TokenType.Eof) {
             throw new JsonException("Not a single JSON document");
         }
         return result;
@@ -73,12 +60,12 @@ public final class JsonReader {
         nextToken(); // Skip leading ObjectStart
 
         JsonObject object = Json.object();
-        while (token != ObjectEnd) {
+        while (token != TokenType.ObjectEnd) {
             if (object.size() > 0) {
-                verify(Comma);
+                verify(TokenType.Comma);
             }
-            String key = verify(String);
-            verify(Colon);
+            String key = verify(TokenType.String);
+            verify(TokenType.Colon);
             object.add(key, parseValue());
             nextToken();
         }
@@ -90,9 +77,9 @@ public final class JsonReader {
         nextToken(); // Skip leading ArrayStart
 
         JsonArray array = Json.array();
-        while (token != ArrayEnd) {
+        while (token != TokenType.ArrayEnd) {
             if (array.size() > 0) {
-                verify(Comma);
+                verify(TokenType.Comma);
             }
             array.add(parseValue());
             nextToken();
@@ -100,7 +87,7 @@ public final class JsonReader {
         return array;
     }
 
-    private String verify(int expected) {
+    private String verify(TokenType expected) {
         if (token != expected) {
             throw new JsonException("Expected " + expected + ", got " + token);
         }
@@ -118,30 +105,30 @@ public final class JsonReader {
         switch (reader.peek()) {
             case '{':
                 reader.read();
-                token(ObjectStart, null);
+                token(TokenType.ObjectStart, null);
                 break;
             case '}':
                 reader.read();
-                token(ObjectEnd, null);
+                token(TokenType.ObjectEnd, null);
                 break;
             case '[':
                 reader.read();
-                token(ArrayStart, null);
+                token(TokenType.ArrayStart, null);
                 break;
             case ']':
                 reader.read();
-                token(ArrayEnd, null);
+                token(TokenType.ArrayEnd, null);
                 break;
             case ':':
                 reader.read();
-                token(Colon, null);
+                token(TokenType.Colon, null);
                 break;
             case ',':
                 reader.read();
-                token(Comma, null);
+                token(TokenType.Comma, null);
                 break;
             case '"':
-                token(String, parseString());
+                token(TokenType.String, parseString());
                 break;
             case '-':
             case '0':
@@ -154,26 +141,26 @@ public final class JsonReader {
             case '7':
             case '8':
             case '9':
-                token(Number, parseNumber());
+                token(TokenType.Number, parseNumber());
                 break;
             case 't':
-                token(True, expect("true"));
+                token(TokenType.True, expect("true"));
                 break;
             case 'f':
-                token(False, expect("false"));
+                token(TokenType.False, expect("false"));
                 break;
             case 'n':
-                token(Null, expect("null"));
+                token(TokenType.Null, expect("null"));
                 break;
             case -1:
-                token(Eof, null);
+                token(TokenType.Eof, null);
                 break;
             default:
                 throw new JsonException("Unexpected character '" + (char) reader.peek() + "'");
         }
     }
 
-    private void token(int type, String value) {
+    private void token(TokenType type, String value) {
         this.token = type;
         this.value = value;
     }
@@ -333,14 +320,6 @@ public final class JsonReader {
         return isDigit(c)
             || c >= 'a' && c <= 'f'
             || c >= 'A' && c <= 'F';
-    }
-
-    // endregion
-
-    // region Low-level reading
-
-    private boolean isEof() {
-        return reader.isEof();
     }
 
     // endregion
