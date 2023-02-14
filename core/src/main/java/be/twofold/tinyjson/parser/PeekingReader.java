@@ -8,25 +8,25 @@ public final class PeekingReader {
 
     private static final int NotPeeked = -2;
     private final Reader reader;
-    private int peeked = NotPeeked;
+    private int current = NotPeeked;
 
     public PeekingReader(Reader reader) {
         this.reader = reader;
     }
 
     public int peek() {
-        if (peeked == NotPeeked) {
-            peeked = readChar();
+        if (current == NotPeeked) {
+            current = readChar();
         }
-        return peeked;
+        return current;
     }
 
-    public int read() {
-        if (peeked == NotPeeked) {
+    public int next() {
+        if (current == NotPeeked) {
             return readChar();
         }
-        int result = peeked;
-        peeked = NotPeeked;
+        int result = current;
+        current = NotPeeked;
         return result;
     }
 

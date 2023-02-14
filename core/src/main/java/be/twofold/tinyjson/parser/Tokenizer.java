@@ -21,7 +21,7 @@ public final class Tokenizer {
         return current;
     }
 
-    public Token read() {
+    public Token next() {
         if (current == null) {
             return nextToken();
         }
@@ -34,22 +34,22 @@ public final class Tokenizer {
         skipWhitespace();
         switch (reader.peek()) {
             case '{':
-                reader.read();
+                reader.next();
                 return new Token(TokenType.ObjectStart, null);
             case '}':
-                reader.read();
+                reader.next();
                 return new Token(TokenType.ObjectEnd, null);
             case '[':
-                reader.read();
+                reader.next();
                 return new Token(TokenType.ArrayStart, null);
             case ']':
-                reader.read();
+                reader.next();
                 return new Token(TokenType.ArrayEnd, null);
             case ':':
-                reader.read();
+                reader.next();
                 return new Token(TokenType.Colon, null);
             case ',':
-                reader.read();
+                reader.next();
                 return new Token(TokenType.Comma, null);
             case '"':
                 return new Token(TokenType.String, parseString());
@@ -72,24 +72,24 @@ public final class Tokenizer {
 
     private String parseString() {
         // skip leading '"'
-        reader.read();
+        reader.next();
         builder.setLength(0);
         while (reader.peek() != '"' && !reader.isEof()) {
             if (reader.peek() < 0x20) {
                 throw new JsonException("Raw control character");
             }
 
-            int ch = reader.read();
+            int ch = reader.next();
             builder.append(ch == '\\' ? escape() : (char) ch);
         }
-        if (reader.read() != '"') {
+        if (reader.next() != '"') {
             throw new JsonException("Unclosed string literal");
         }
         return builder.toString();
     }
 
     private char escape() {
-        switch (reader.read()) {
+        switch (reader.next()) {
             case '"':
                 return '"';
             case '\\':
@@ -116,7 +116,7 @@ public final class Tokenizer {
     private char escapeUnicode() {
         int result = 0;
         for (int i = 0; i < 4; i++) {
-            int ch = reader.read();
+            int ch = reader.next();
             if (!isHex(ch)) {
                 throw new JsonException("Expected hex digit");
             }
@@ -173,7 +173,7 @@ public final class Tokenizer {
 
     private String expect(String expected) {
         for (int i = 0; i < expected.length(); i++) {
-            if (reader.read() != expected.charAt(i)) {
+            if (reader.next() != expected.charAt(i)) {
                 throw new JsonException("Expected '" + expected + "' literal");
             }
         }
@@ -181,12 +181,12 @@ public final class Tokenizer {
     }
 
     private void appendNext() {
-        builder.append(reader.read());
+        builder.append(reader.next());
     }
 
     private void skipWhitespace() {
         while (isWhitespace(reader.peek())) {
-            reader.read();
+            reader.next();
         }
     }
 

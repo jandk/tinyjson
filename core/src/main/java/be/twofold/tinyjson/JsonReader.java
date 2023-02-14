@@ -27,7 +27,7 @@ public final class JsonReader {
 
 
     private JsonValue parseValue() {
-        Token token = tokenizer.read();
+        Token token = tokenizer.next();
         switch (token.getType()) {
             case ObjectStart:
                 return parseObject();
@@ -59,7 +59,7 @@ public final class JsonReader {
             verify(TokenType.Colon);
             object.add(key, parseValue());
         }
-        tokenizer.read(); // read '}'
+        tokenizer.next(); // read '}'
 
         return object;
     }
@@ -73,7 +73,7 @@ public final class JsonReader {
             }
             array.add(parseValue());
         }
-        tokenizer.read(); // read ']'
+        tokenizer.next(); // read ']'
 
         return array;
     }
@@ -86,7 +86,7 @@ public final class JsonReader {
         if (notMatch(expected)) {
             throw new JsonException("Expected " + expected + ", got " + tokenizer.peek());
         }
-        return tokenizer.read().getValue();
+        return tokenizer.next().getValue();
     }
 
 }
