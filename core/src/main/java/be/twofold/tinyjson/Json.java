@@ -1,5 +1,7 @@
 package be.twofold.tinyjson;
 
+import be.twofold.tinyjson.parser.*;
+
 import java.io.*;
 
 public final class Json {
@@ -43,7 +45,8 @@ public final class Json {
     // endregion
 
     public static JsonValue parse(Reader reader) {
-        return new JsonReader(reader).parse();
+        PeekingReader peekingReader = new PeekingReader(reader);
+        return new JsonReader(peekingReader).parse();
     }
 
     public static JsonValue parse(String json) {
