@@ -4,24 +4,24 @@ import be.twofold.tinyjson.*;
 
 import java.util.*;
 
-public final class Tokenizer {
+final class Tokenizer {
 
     private final PeekingReader reader;
     private final StringBuilder builder = new StringBuilder();
     private Token current;
 
-    public Tokenizer(PeekingReader reader) {
+    Tokenizer(PeekingReader reader) {
         this.reader = Objects.requireNonNull(reader, "reader");
     }
 
-    public Token peek() {
+    Token peek() {
         if (current == null) {
             current = nextToken();
         }
         return current;
     }
 
-    public Token next() {
+    Token next() {
         if (current == null) {
             return nextToken();
         }

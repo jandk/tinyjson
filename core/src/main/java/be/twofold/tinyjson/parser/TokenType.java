@@ -1,6 +1,6 @@
 package be.twofold.tinyjson.parser;
 
-public enum TokenType {
+enum TokenType {
     ObjectStart,
     ObjectEnd,
     ArrayStart,

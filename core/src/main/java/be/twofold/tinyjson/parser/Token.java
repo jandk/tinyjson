@@ -2,20 +2,20 @@ package be.twofold.tinyjson.parser;
 
 import java.util.*;
 
-public final class Token {
+final class Token {
     private final TokenType type;
     private final String value;
 
-    public Token(TokenType type, String value) {
+    Token(TokenType type, String value) {
         this.type = Objects.requireNonNull(type, "type");
         this.value = value;
     }
 
-    public TokenType getType() {
+    TokenType getType() {
         return type;
     }
 
-    public String getValue() {
+    String getValue() {
         return value;
     }
 

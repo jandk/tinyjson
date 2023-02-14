@@ -1,18 +1,24 @@
-package be.twofold.tinyjson;
+package be.twofold.tinyjson.parser;
 
-import be.twofold.tinyjson.parser.*;
+import be.twofold.tinyjson.*;
 
+import java.io.*;
 import java.util.*;
 
-public final class JsonReader {
-
+public final class JsonParser {
     private final Tokenizer tokenizer;
 
-    JsonReader(Tokenizer tokenizer) {
+    private JsonParser(Tokenizer tokenizer) {
         this.tokenizer = Objects.requireNonNull(tokenizer, "tokenizer");
     }
 
-    public JsonValue parse() {
+    public static JsonValue parse(Reader reader) {
+        PeekingReader peekingReader = new PeekingReader(reader);
+        Tokenizer tokenizer = new Tokenizer(peekingReader);
+        return new JsonParser(tokenizer).parse();
+    }
+
+    private JsonValue parse() {
         JsonValue result;
         try {
             result = parseValue();
@@ -88,5 +94,4 @@ public final class JsonReader {
         }
         return tokenizer.next().getValue();
     }
-
 }

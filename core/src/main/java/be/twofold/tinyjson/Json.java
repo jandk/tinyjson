@@ -12,7 +12,6 @@ public final class Json {
         throw new UnsupportedOperationException();
     }
 
-    // region Factory Methods
 
     public static JsonValue bool(boolean value) {
         return value ? JsonBoolean.True : JsonBoolean.False;
@@ -42,12 +41,9 @@ public final class Json {
         return new JsonObject();
     }
 
-    // endregion
 
     public static JsonValue parse(Reader reader) {
-        PeekingReader peekingReader = new PeekingReader(reader);
-        Tokenizer tokenizer = new Tokenizer(peekingReader);
-        return new JsonReader(tokenizer).parse();
+        return JsonParser.parse(reader);
     }
 
     public static JsonValue parse(String json) {

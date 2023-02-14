@@ -4,24 +4,24 @@ import be.twofold.tinyjson.*;
 
 import java.io.*;
 
-public final class PeekingReader {
+final class PeekingReader {
 
     private static final int NotPeeked = -2;
     private final Reader reader;
     private int current = NotPeeked;
 
-    public PeekingReader(Reader reader) {
+    PeekingReader(Reader reader) {
         this.reader = reader;
     }
 
-    public int peek() {
+    int peek() {
         if (current == NotPeeked) {
             current = readChar();
         }
         return current;
     }
 
-    public int next() {
+    int next() {
         if (current == NotPeeked) {
             return readChar();
         }
@@ -30,7 +30,7 @@ public final class PeekingReader {
         return result;
     }
 
-    public boolean isEof() {
+    boolean isEof() {
         return peek() == -1;
     }
 

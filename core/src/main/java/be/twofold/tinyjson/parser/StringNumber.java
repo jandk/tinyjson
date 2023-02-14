@@ -1,4 +1,4 @@
-package be.twofold.tinyjson;
+package be.twofold.tinyjson.parser;
 
 import java.math.*;
 import java.util.*;
