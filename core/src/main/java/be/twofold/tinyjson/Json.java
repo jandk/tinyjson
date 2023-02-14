@@ -46,7 +46,8 @@ public final class Json {
 
     public static JsonValue parse(Reader reader) {
         PeekingReader peekingReader = new PeekingReader(reader);
-        return new JsonReader(peekingReader).parse();
+        Tokenizer tokenizer = new Tokenizer(peekingReader);
+        return new JsonReader(tokenizer).parse();
     }
 
     public static JsonValue parse(String json) {
