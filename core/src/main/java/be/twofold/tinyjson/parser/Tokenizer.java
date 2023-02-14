@@ -8,86 +8,73 @@ public final class Tokenizer {
 
     private final PeekingReader reader;
     private final StringBuilder builder = new StringBuilder();
-    private Token token = new Token();
+    private Token current;
 
     public Tokenizer(PeekingReader reader) {
         this.reader = Objects.requireNonNull(reader, "reader");
     }
 
-    public Token getToken() {
-        return token;
+    public Token peek() {
+        if (current == null) {
+            current = nextToken();
+        }
+        return current;
     }
 
-    public void nextToken() {
+    public Token read() {
+        if (current == null) {
+            return nextToken();
+        }
+        Token result = current;
+        current = null;
+        return result;
+    }
+
+    private Token nextToken() {
         skipWhitespace();
         switch (reader.peek()) {
             case '{':
                 reader.read();
-                token(TokenType.ObjectStart, null);
-                break;
+                return new Token(TokenType.ObjectStart, null);
             case '}':
                 reader.read();
-                token(TokenType.ObjectEnd, null);
-                break;
+                return new Token(TokenType.ObjectEnd, null);
             case '[':
                 reader.read();
-                token(TokenType.ArrayStart, null);
-                break;
+                return new Token(TokenType.ArrayStart, null);
             case ']':
                 reader.read();
-                token(TokenType.ArrayEnd, null);
-                break;
+                return new Token(TokenType.ArrayEnd, null);
             case ':':
                 reader.read();
-                token(TokenType.Colon, null);
-                break;
+                return new Token(TokenType.Colon, null);
             case ',':
                 reader.read();
-                token(TokenType.Comma, null);
-                break;
+                return new Token(TokenType.Comma, null);
             case '"':
-                token(TokenType.String, parseString());
-                break;
-            case '-':
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-                token(TokenType.Number, parseNumber());
-                break;
+                return new Token(TokenType.String, parseString());
             case 't':
-                token(TokenType.True, expect("true"));
-                break;
+                return new Token(TokenType.True, expect("true"));
             case 'f':
-                token(TokenType.False, expect("false"));
-                break;
+                return new Token(TokenType.False, expect("false"));
             case 'n':
-                token(TokenType.Null, expect("null"));
-                break;
+                return new Token(TokenType.Null, expect("null"));
             case -1:
-                token(TokenType.Eof, null);
-                break;
+                return new Token(TokenType.Eof, null);
             default:
-                throw new JsonException("Unexpected character '" + (char) reader.peek() + "'");
+                int ch = reader.peek();
+                if (isDigit(ch) || ch == '-') {
+                    return new Token(TokenType.Number, number());
+                }
+                throw new JsonException("Unexpected character '" + (char) ch + "'");
         }
-    }
-
-    private void token(TokenType type, String value) {
-        this.token.setType(type);
-        this.token.setValue(value);
     }
 
     private String parseString() {
         // skip leading '"'
         reader.read();
         builder.setLength(0);
-        while (!reader.isEof() && reader.peek() != '"') {
+        while (reader.peek() != '"' && !reader.isEof()) {
             if (reader.peek() < 0x20) {
                 throw new JsonException("Raw control character");
             }
@@ -130,7 +117,7 @@ public final class Tokenizer {
         int result = 0;
         for (int i = 0; i < 4; i++) {
             int ch = reader.read();
-            if (!isHexDigit(ch)) {
+            if (!isHex(ch)) {
                 throw new JsonException("Expected hex digit");
             }
             result = (result << 4) | Character.digit(ch, 16);
@@ -139,9 +126,10 @@ public final class Tokenizer {
     }
 
 
-    private String parseNumber() {
+    private String number() {
         builder.setLength(0);
 
+        // sign
         if (reader.peek() == '-') {
             appendNext();
         }
@@ -149,11 +137,10 @@ public final class Tokenizer {
         // integer part
         if (reader.peek() == '0') {
             appendNext();
-        } else {
-            if (reader.peek() < '1' || reader.peek() > '9') {
-                throw new JsonException();
-            }
+        } else if (isDigit(reader.peek())) {
             digits();
+        } else {
+            throw new JsonException("Expected a digit");
         }
 
         // decimal part
@@ -203,26 +190,18 @@ public final class Tokenizer {
         }
     }
 
-    private boolean isWhitespace(int c) {
-        switch (c) {
-            case ' ':
-            case '\n':
-            case '\r':
-            case '\t':
-                return true;
-            default:
-                return false;
-        }
+    private boolean isWhitespace(int ch) {
+        return ch == ' ' || ch == '\n' || ch == '\r' || ch == '\t';
     }
 
-    private boolean isDigit(int c) {
-        return c >= '0' && c <= '9';
+    private boolean isDigit(int ch) {
+        return ch >= '0' && ch <= '9';
     }
 
-    private boolean isHexDigit(int c) {
-        return isDigit(c)
-            || c >= 'a' && c <= 'f'
-            || c >= 'A' && c <= 'F';
+    private boolean isHex(int ch) {
+        return isDigit(ch)
+            || ch >= 'a' && ch <= 'f'
+            || ch >= 'A' && ch <= 'F';
     }
 
 }
