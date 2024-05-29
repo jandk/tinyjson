@@ -6,12 +6,6 @@
     <groupId>be.twofold</groupId>
     <artifactId>tinyjson</artifactId>
     <version>0.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>bind</module>
-        <module>core</module>
-    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,12 +15,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>be.twofold</groupId>
-                <artifactId>tinyjson-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
@@ -47,5 +35,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
 </project>
