@@ -1,5 +1,7 @@
 package be.twofold.tinyjson;
 
+import be.twofold.tinyjson.read.*;
+
 import java.io.*;
 
 public final class Json {
