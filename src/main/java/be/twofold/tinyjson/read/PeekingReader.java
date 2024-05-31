@@ -17,11 +17,11 @@ final class PeekingReader {
     }
 
     int line() {
-        return line;
+        return line + 1;
     }
 
     int column() {
-        return column;
+        return column + 1;
     }
 
     int peek() {
