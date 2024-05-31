@@ -3,22 +3,17 @@ package be.twofold.tinyjson.read;
 import be.twofold.tinyjson.*;
 
 import java.io.*;
-import java.util.*;
 
 public final class JsonReader {
 
-    // Reader state
-    private static final int NotPeeked = -2;
-    private final Reader reader;
-    private int peeked = NotPeeked;
-
     // Tokenizer state
     private final StringBuilder builder = new StringBuilder();
+    private final PeekingReader reader;
     private JsonTokenType token;
     private String value;
 
     public JsonReader(Reader reader) {
-        this.reader = Objects.requireNonNull(reader, "reader");
+        this.reader = new PeekingReader(reader);
     }
 
     // region Parser
@@ -106,29 +101,29 @@ public final class JsonReader {
 
     public void nextToken() {
         skipWhitespace();
-        switch (peek()) {
+        switch (reader.peek()) {
             case '{':
-                read();
+                reader.read();
                 token(JsonTokenType.ObjectStart, null);
                 break;
             case '}':
-                read();
+                reader.read();
                 token(JsonTokenType.ObjectEnd, null);
                 break;
             case '[':
-                read();
+                reader.read();
                 token(JsonTokenType.ArrayStart, null);
                 break;
             case ']':
-                read();
+                reader.read();
                 token(JsonTokenType.ArrayEnd, null);
                 break;
             case ':':
-                read();
+                reader.read();
                 token(JsonTokenType.Colon, null);
                 break;
             case ',':
-                read();
+                reader.read();
                 token(JsonTokenType.Comma, null);
                 break;
             case '"':
@@ -160,7 +155,7 @@ public final class JsonReader {
                 token(JsonTokenType.Eof, null);
                 break;
             default:
-                throw new JsonException("Unexpected character '" + (char) peek() + "'");
+                throw new JsonException("Unexpected character '" + (char) reader.peek() + "'");
         }
     }
 
@@ -173,16 +168,16 @@ public final class JsonReader {
 
     private String parseString() {
         // skip leading '"'
-        read();
+        reader.read();
         builder.setLength(0);
-        while (!isEof() && peek() != '"') {
-            if (peek() < 0x20) {
+        while (!reader.isEof() && reader.peek() != '"') {
+            if (reader.peek() < 0x20) {
                 throw new JsonException("Raw control character");
             }
 
-            if (peek() == '\\') {
-                read();
-                switch (read()) {
+            if (reader.peek() == '\\') {
+                reader.read();
+                switch (reader.read()) {
                     case '"':
                         builder.append('"');
                         break;
@@ -217,7 +212,7 @@ public final class JsonReader {
                 appendNext();
             }
         }
-        if (read() != '"') {
+        if (reader.read() != '"') {
             throw new JsonException("Unclosed string literal");
         }
         return builder.toString();
@@ -226,7 +221,7 @@ public final class JsonReader {
     private char parseUnicode() {
         int result = 0;
         for (int i = 0; i < 4; i++) {
-            int read = read();
+            int read = reader.read();
             if (!isHexDigit(read)) {
                 throw new JsonException("Expected hex digit");
             }
@@ -242,30 +237,30 @@ public final class JsonReader {
     private String parseNumber() {
         builder.setLength(0);
 
-        if (peek() == '-') {
+        if (reader.peek() == '-') {
             appendNext();
         }
 
         // integer part
-        if (peek() == '0') {
+        if (reader.peek() == '0') {
             appendNext();
         } else {
-            if (peek() < '1' || peek() > '9') {
+            if (reader.peek() < '1' || reader.peek() > '9') {
                 throw new JsonException();
             }
             digits();
         }
 
         // decimal part
-        if (peek() == '.') {
+        if (reader.peek() == '.') {
             appendNext();
             digits();
         }
 
         // exponent part
-        if (peek() == 'e' || peek() == 'E') {
+        if (reader.peek() == 'e' || reader.peek() == 'E') {
             appendNext();
-            if (peek() == '-' || peek() == '+') {
+            if (reader.peek() == '-' || reader.peek() == '+') {
                 appendNext();
             }
             digits();
@@ -275,10 +270,10 @@ public final class JsonReader {
     }
 
     private void digits() {
-        if (!isDigit(peek())) {
+        if (!isDigit(reader.peek())) {
             throw new JsonException("Expected a digit");
         }
-        while (isDigit(peek())) {
+        while (isDigit(reader.peek())) {
             appendNext();
         }
     }
@@ -287,7 +282,7 @@ public final class JsonReader {
 
     private String expect(String expected) {
         for (int i = 0; i < expected.length(); i++) {
-            if (read() != expected.charAt(i)) {
+            if (reader.read() != expected.charAt(i)) {
                 throw new JsonException("Expected '" + expected + "' literal");
             }
         }
@@ -295,12 +290,12 @@ public final class JsonReader {
     }
 
     private void appendNext() {
-        builder.append(read());
+        builder.append(reader.read());
     }
 
     private void skipWhitespace() {
-        while (isWhitespace(peek())) {
-            read();
+        while (isWhitespace(reader.peek())) {
+            reader.read();
         }
     }
 
@@ -324,38 +319,6 @@ public final class JsonReader {
         return isDigit(c)
             || c >= 'a' && c <= 'f'
             || c >= 'A' && c <= 'F';
-    }
-
-    // endregion
-
-    // region Low-level reading
-
-    private int peek() {
-        if (peeked == NotPeeked) {
-            peeked = readChar();
-        }
-        return peeked;
-    }
-
-    private int read() {
-        if (peeked == NotPeeked) {
-            return readChar();
-        }
-        int result = peeked;
-        peeked = NotPeeked;
-        return result;
-    }
-
-    private boolean isEof() {
-        return peek() == -1;
-    }
-
-    private int readChar() {
-        try {
-            return reader.read();
-        } catch (IOException e) {
-            throw new JsonException("Unexpected I/O error", e);
-        }
     }
 
     // endregion
