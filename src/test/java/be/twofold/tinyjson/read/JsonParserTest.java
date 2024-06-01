@@ -1,5 +1,6 @@
-package be.twofold.tinyjson;
+package be.twofold.tinyjson.read;
 
+import be.twofold.tinyjson.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 

@@ -4,10 +4,10 @@ import be.twofold.tinyjson.*;
 
 import java.io.*;
 
-public final class JsonReader {
+public final class JsonParser {
     private final JsonTokenizer tokenizer;
 
-    public JsonReader(Reader reader) {
+    public JsonParser(Reader reader) {
         this.tokenizer = new JsonTokenizer(reader);
     }
 
