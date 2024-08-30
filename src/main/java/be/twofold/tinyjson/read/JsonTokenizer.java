@@ -221,7 +221,7 @@ final class JsonTokenizer {
     }
 
     private void appendNext() {
-        builder.append(reader.read());
+        builder.appendCodePoint(reader.read());
     }
 
     private void skipWhitespace() {
